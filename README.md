@@ -1,36 +1,158 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Professional Portfolio Website
 
-## Getting Started
+A modern, responsive portfolio website built with Next.js 15, TypeScript, and Tailwind CSS. This portfolio showcases your skills, projects, and provides easy ways for potential clients or employers to connect with you.
 
-First, run the development server:
+## ✨ Features
 
+- **Modern Design**: Clean, professional UI with smooth animations and transitions
+- **Fully Responsive**: Optimized for all devices (mobile, tablet, desktop)
+- **Dark Mode Support**: Automatic dark mode based on system preferences
+- **Project Showcase**: Dynamic project cards with technology tags and links
+- **Skills Section**: Organized display of technical skills by category
+- **Social Media Integration**: Easy links to GitHub, LinkedIn, Twitter, and email
+- **Smooth Navigation**: Fixed header with smooth scroll to sections
+- **SEO Optimized**: Proper meta tags and semantic HTML
+- **Type Safe**: Built with TypeScript for better development experience
+- **Fast Performance**: Optimized with Next.js App Router and static generation
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ installed on your machine
+- npm, yarn, pnpm, or bun package manager
+
+### Installation
+
+1. Clone the repository or navigate to the project directory:
+```bash
+cd mikeade
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎨 Customization
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Personal Information
 
-## Learn More
+Edit `/lib/data.ts` to customize your portfolio content:
 
-To learn more about Next.js, take a look at the following resources:
+1. **Personal Info**: Update `personalInfo` object with your name, title, bio, email, and location
+2. **Projects**: Modify the `projects` array to showcase your work
+   - Add project titles, descriptions, technologies used
+   - Include GitHub repository links and live demo URLs
+   - Add project images (place images in `/public/projects/`)
+3. **Skills**: Update the `skills` array with your technical skills organized by category
+4. **Social Links**: Customize `socialLinks` with your social media profiles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Styling
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Colors**: The site uses Tailwind CSS. Modify colors in the components or extend the theme
+- **Fonts**: The project uses Geist Sans and Geist Mono fonts by default
+- **Layout**: All components are in `/components/` directory for easy customization
 
-## Deploy on Vercel
+### Adding New Projects
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To add a new project, add an object to the `projects` array in `/lib/data.ts`:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```typescript
+{
+  id: '4',
+  title: 'Your Project Name',
+  description: 'Project description...',
+  technologies: ['Tech1', 'Tech2', 'Tech3'],
+  githubUrl: 'https://github.com/yourusername/project',
+  liveUrl: 'https://your-project.com',
+  imageUrl: '/projects/your-image.jpg'
+}
+```
+
+## 📁 Project Structure
+
+```
+mikeade/
+├── app/
+│   ├── layout.tsx          # Root layout with metadata
+│   ├── page.tsx            # Main page component
+│   └── globals.css         # Global styles
+├── components/
+│   ├── Header.tsx          # Navigation header
+│   ├── Hero.tsx            # Hero/landing section
+│   ├── About.tsx           # About section
+│   ├── Skills.tsx          # Skills showcase
+│   ├── Projects.tsx        # Projects gallery
+│   ├── Contact.tsx         # Contact section
+│   └── Footer.tsx          # Footer component
+├── lib/
+│   ├── data.ts             # Portfolio content data
+│   └── types.ts            # TypeScript type definitions
+└── public/
+    └── projects/           # Project images (create this folder)
+```
+
+## 🛠️ Built With
+
+- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+- **[TypeScript](https://www.typescriptlang.org/)** - Type safety and better DX
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Lucide React](https://lucide.dev/)** - Beautiful icon library
+- **[Geist Font](https://vercel.com/font)** - Modern font family
+
+## 📝 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## 🚀 Deployment
+
+### Deploy to Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Visit [Vercel](https://vercel.com)
+3. Import your repository
+4. Vercel will automatically detect Next.js and deploy
+
+### Deploy to Other Platforms
+
+This is a standard Next.js application and can be deployed to:
+- Netlify
+- AWS Amplify
+- Railway
+- Render
+- Any platform supporting Node.js
+
+## 📄 License
+
+This project is open source and available for personal and commercial use.
+
+## 🤝 Contributing
+
+Feel free to fork this project and customize it for your own portfolio!
+
+## 📧 Contact
+
+For questions or feedback, reach out via the contact section on the website.
+
+---
+
+**Built with ❤️ using Next.js and Tailwind CSS**
