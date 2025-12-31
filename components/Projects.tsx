@@ -1,61 +1,95 @@
+'use client';
+
 import { projects } from '@/lib/data';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Projects() {
-  return (
-    <section id="projects" className="px-6 lg:px-12 pt-12 pb-20 bg-[#0a0a0a]">
-      <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row gap-12">
-        <div className="hidden lg:block w-[400px] flex-shrink-0"></div>
-        <div className="flex-1 min-w-0 max-w-3xl">
-          <div className="mb-16">
-            <h2 className="text-6xl lg:text-8xl xl:text-9xl font-bold text-white leading-none mb-2">
-              RECENT
-            </h2>
-            <h2 className="text-6xl lg:text-8xl xl:text-9xl font-bold text-gray-700 leading-none">
-              PROJECTS
-            </h2>
-          </div>
+  const [visibleProjects, setVisibleProjects] = useState<Set<string>>(new Set());
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
-          <div className="space-y-8">
-          {projects.map((project, index) => (
-            <a
-              key={project.id}
-              href={project.liveUrl || project.githubUrl || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block"
-            >
-              <div className="flex flex-col sm:flex-row gap-6 p-6 rounded-2xl border border-gray-800/50 hover:border-gray-700 transition-all duration-300 hover:bg-gray-900/20">
-                <div className="sm:w-24 sm:h-24 w-full h-32 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-800">
-                  <span className="text-4xl font-bold text-gray-600">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="text-xl font-bold text-white group-hover:text-gray-300 transition-colors">
-                      {project.title}
-                    </h3>
-                    <svg className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"/>
-                      <polyline points="7 7 17 7 17 17"/>
-                    </svg>
-                  </div>
-                  <p className="text-sm text-gray-400 mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.slice(0, 3).map((tech, i) => (
-                      <span key={i} className="px-3 py-1 bg-gray-800/50 text-gray-400 text-xs rounded-full border border-gray-800">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleProjects((prev) => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    const elements = document.querySelectorAll('[data-project]');
+    elements.forEach((el) => observerRef.current?.observe(el));
+
+    return () => observerRef.current?.disconnect();
+  }, []);
+
+  return (
+    <section id="projects" className="pt-8 sm:pt-12 pb-12 sm:pb-20">
+      <div className="mb-8 sm:mb-10 lg:mb-16">
+        <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black text-white leading-[0.95] mb-0 font-[family-name:var(--font-poppins)] text-center lg:text-left">
+          RECENT
+        </h2>
+        <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] font-[family-name:var(--font-poppins)] text-center lg:text-left" style={{color: '#353334'}}>
+          PROJECTS
+        </h2>
+      </div>
+
+      <div className="space-y-4 sm:space-y-6">
+        {projects.map((project, index) => (
+          <a
+            key={project.id}
+            href={project.liveUrl || project.githubUrl || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block"
+            data-project
+            id={`project-${project.id}`}
+          >
+            <div className="flex items-center gap-4 sm:gap-6 py-3 sm:py-4 hover:translate-x-2 transition-transform duration-300">
+              {/* Project Thumbnail */}
+              <div 
+                className={`w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 transition-all duration-700 ease-out ${
+                  visibleProjects.has(`project-${project.id}`) 
+                    ? 'scale-100 rotate-0 opacity-100' 
+                    : 'scale-0 -rotate-[15deg] opacity-0'
+                }`}
+                style={{
+                  boxShadow: '0 8px 32px rgba(239, 35, 60, 0.15), 0 0 48px rgba(239, 35, 60, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.05)'
+                }}
+              >
+                <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+                  {project.imageUrl ? (
+                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="font-bold text-2xl">{project.title.substring(0, 2)}</span>
+                  )}
                 </div>
               </div>
-            </a>
-          ))}
-          </div>
-        </div>
+
+              {/* Project Info */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-0.5 sm:mb-1 group-hover:text-gray-300 transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-400 line-clamp-1 font-medium">
+                  {project.technologies.join(' • ')}
+                </p>
+              </div>
+
+              {/* Arrow */}
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" style={{color: '#ef233c'}}>
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"/>
+                    <polyline points="7 7 17 7 17 17"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
       </div>
     </section>
   );
