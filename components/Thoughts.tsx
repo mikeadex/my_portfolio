@@ -18,9 +18,7 @@ export default function Thoughts() {
         {blogPosts.map((post) => (
           <a
             key={post.id}
-            href={post.url || '#'}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/blog/${post.slug}`}
             className="group block"
           >
             <article className="py-4 sm:py-6 border-b border-gray-800 hover:border-[#ef233c] transition-colors">
