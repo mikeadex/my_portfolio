@@ -5,7 +5,7 @@ export default function Skills() {
     <section id="skills" className="py-24 px-6 bg-gray-50 dark:bg-gray-950">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-xs tracking-[0.3em] text-gray-600 dark:text-gray-400 uppercase font-medium mb-12">
-          PREMIUM TOOLS
+          SKILLS & TOOLS
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
