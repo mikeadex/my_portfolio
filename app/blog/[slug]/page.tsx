@@ -105,9 +105,9 @@ export default async function BlogPost({ params }: PageProps) {
   };
 
   return (
-    <div className=\"min-h-screen bg-[#151312]\">
+    <div className="min-h-screen bg-[#151312]">
       <script
-        type=\"application/ld+json\"
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="px-4 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-20">
