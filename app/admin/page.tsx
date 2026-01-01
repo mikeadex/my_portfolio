@@ -18,7 +18,7 @@ export default function AdminDashboard() {
   const loadData = async () => {
     try {
       const [blogsRes, projectsRes] = await Promise.all([
-        fetch('/api/blog'),
+        fetch('/api/blog?includeUnpublished=true'),
         fetch('/api/projects'),
       ]);
       

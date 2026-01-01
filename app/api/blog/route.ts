@@ -2,11 +2,14 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 
-// GET /api/blog - Get all published blog posts
-export async function GET() {
+// GET /api/blog - Get blog posts (published only by default, all if includeUnpublished=true)
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const includeUnpublished = searchParams.get('includeUnpublished') === 'true';
+    
     const posts = await prisma.blogPost.findMany({
-      where: { published: true },
+      where: includeUnpublished ? {} : { published: true },
       orderBy: { createdAt: 'desc' },
     });
     

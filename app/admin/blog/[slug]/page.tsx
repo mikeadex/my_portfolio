@@ -2,8 +2,10 @@
 
 import { useState, useEffect, FormEvent } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Edit3 } from 'lucide-react';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function BlogEditor() {
   const router = useRouter();
@@ -14,6 +16,7 @@ export default function BlogEditor() {
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [formData, setFormData] = useState({
     slug: '',
     title: '',
@@ -248,17 +251,76 @@ export default function BlogEditor() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Content * (Markdown supported)
-            </label>
-            <textarea
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-800 rounded-lg text-white focus:outline-none focus:border-[#ef233c] transition-colors resize-none font-mono text-sm"
-              placeholder="Write your post content here..."
-              rows={20}
-              required
-            />
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-gray-300">
+                Content * (Markdown supported)
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowPreview(!showPreview)}
+                className="flex items-center gap-2 px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors text-sm"
+              >
+                {showPreview ? (
+                  <>
+                    <Edit3 size={14} />
+                    Edit
+                  </>
+                ) : (
+                  <>
+                    <Eye size={14} />
+                    Preview
+                  </>
+                )}
+              </button>
+            </div>
+            
+            {showPreview ? (
+              <div className="w-full min-h-[500px] px-4 py-3 bg-[#0a0a0a] border border-gray-800 rounded-lg text-white overflow-auto">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ children }) => <h1 className="text-3xl font-bold text-white mt-8 mb-4">{children}</h1>,
+                    h2: ({ children }) => <h2 className="text-2xl font-bold text-white mt-6 mb-3">{children}</h2>,
+                    h3: ({ children }) => <h3 className="text-xl font-bold text-white mt-4 mb-2">{children}</h3>,
+                    p: ({ children }) => <p className="text-gray-300 mb-3">{children}</p>,
+                    ul: ({ children }) => <ul className="list-disc list-outside ml-6 space-y-2 my-4 text-gray-300">{children}</ul>,
+                    ol: ({ children }) => <ol className="list-decimal list-outside ml-6 space-y-2 my-4 text-gray-300">{children}</ol>,
+                    li: ({ children }) => <li className="text-gray-300 pl-2">{children}</li>,
+                    code: ({ className, children, ...props }: any) => {
+                      const match = /language-(\w+)/.exec(className || '');
+                      return match ? (
+                        <pre className="bg-gray-900 rounded p-3 overflow-x-auto my-4 border border-gray-700">
+                          <code className={className} {...props}>{children}</code>
+                        </pre>
+                      ) : (
+                        <code className="bg-gray-800 px-1.5 py-0.5 rounded text-[#ef233c] font-mono text-sm" {...props}>
+                          {children}
+                        </code>
+                      );
+                    },
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-l-4 border-[#ef233c] pl-4 my-4 italic text-gray-400">
+                        {children}
+                      </blockquote>
+                    ),
+                    a: ({ children, href }) => (
+                      <a href={href} className="text-[#ef233c] hover:underline">{children}</a>
+                    ),
+                  }}
+                >
+                  {formData.content || '*No content to preview*'}
+                </ReactMarkdown>
+              </div>
+            ) : (
+              <textarea
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-800 rounded-lg text-white focus:outline-none focus:border-[#ef233c] transition-colors resize-none font-mono text-sm"
+                placeholder="Write your post content here..."
+                rows={20}
+                required
+              />
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-6">

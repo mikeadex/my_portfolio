@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -113,87 +115,75 @@ export default async function BlogPost({ params }: PageProps) {
 
           {/* Content */}
           <div className="prose prose-invert prose-lg max-w-none">
-            <div 
-              className="text-gray-300 leading-relaxed space-y-6"
-              style={{
-                fontSize: '1.125rem',
-                lineHeight: '1.8'
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ children }) => (
+                  <h1 className="text-4xl font-black text-white mt-12 mb-6 font-[family-name:var(--font-poppins)]">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-3xl font-bold text-white mt-10 mb-4 font-[family-name:var(--font-poppins)]">
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-2xl font-bold text-white mt-8 mb-3 font-[family-name:var(--font-poppins)]">
+                    {children}
+                  </h3>
+                ),
+                p: ({ children }) => (
+                  <p className="text-gray-300 mb-4 text-lg leading-relaxed">{children}</p>
+                ),
+                ul: ({ children }) => (
+                  <ul className="list-disc list-outside ml-6 space-y-3 my-6 text-gray-300">{children}</ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal list-outside ml-6 space-y-3 my-6 text-gray-300">{children}</ol>
+                ),
+                li: ({ children }) => (
+                  <li className="text-gray-300 pl-2">{children}</li>
+                ),
+                code: ({ className, children, ...props }: any) => {
+                  const match = /language-(\w+)/.exec(className || '');
+                  return match ? (
+                    <pre className="bg-gray-900 rounded-lg p-4 overflow-x-auto my-6 border-2" style={{ borderColor: '#ef233c' }}>
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    </pre>
+                  ) : (
+                    <code className="bg-gray-800 px-2 py-1 rounded text-[#ef233c] font-mono text-sm" {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-4 pl-4 my-6 italic text-gray-400" style={{ borderColor: '#ef233c' }}>
+                    {children}
+                  </blockquote>
+                ),
+                a: ({ children, href }) => (
+                  <a 
+                    href={href}
+                    className="text-[#ef233c] hover:underline font-medium"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {children}
+                  </a>
+                ),
+                strong: ({ children }) => (
+                  <strong className="text-white font-bold">{children}</strong>
+                ),
+                em: ({ children }) => (
+                  <em className="text-gray-200 italic">{children}</em>
+                ),
               }}
             >
-              {post.content.split('\n\n').map((paragraph: string, index: number) => {
-                // Handle headings
-                if (paragraph.startsWith('# ')) {
-                  return (
-                    <h1 key={index} className="text-4xl font-black text-white mt-12 mb-6 font-[family-name:var(--font-poppins)]">
-                      {paragraph.replace('# ', '')}
-                    </h1>
-                  );
-                }
-                if (paragraph.startsWith('## ')) {
-                  return (
-                    <h2 key={index} className="text-3xl font-bold text-white mt-10 mb-4 font-[family-name:var(--font-poppins)]">
-                      {paragraph.replace('## ', '')}
-                    </h2>
-                  );
-                }
-                if (paragraph.startsWith('### ')) {
-                  return (
-                    <h3 key={index} className="text-2xl font-bold text-white mt-8 mb-3 font-[family-name:var(--font-poppins)]">
-                      {paragraph.replace('### ', '')}
-                    </h3>
-                  );
-                }
-                
-                // Handle lists
-                if (paragraph.startsWith('- ') || paragraph.startsWith('* ')) {
-                  const items = paragraph.split('\n').filter((line: string) => line.startsWith('- ') || line.startsWith('* '));
-                  return (
-                    <ul key={index} className="list-disc list-inside space-y-2 my-6">
-                      {items.map((item: string, i: number) => (
-                        <li key={i} className="text-gray-300">
-                          {item.replace(/^[*-] /, '')}
-                        </li>
-                      ))}
-                    </ul>
-                  );
-                }
-                
-                // Handle numbered lists
-                if (/^\d+\./.test(paragraph)) {
-                  const items = paragraph.split('\n').filter((line: string) => /^\d+\./.test(line));
-                  return (
-                    <ol key={index} className="list-decimal list-inside space-y-2 my-6">
-                      {items.map((item: string, i: number) => (
-                        <li key={i} className="text-gray-300">
-                          {item.replace(/^\d+\. /, '')}
-                        </li>
-                      ))}
-                    </ol>
-                  );
-                }
-
-                // Handle code blocks
-                if (paragraph.includes('```')) {
-                  const code = paragraph.replace(/```\w*\n?/g, '').trim();
-                  return (
-                    <pre key={index} className="bg-gray-900 rounded-lg p-4 overflow-x-auto my-6 border-2" style={{ borderColor: '#ef233c' }}>
-                      <code className="text-sm text-gray-300">{code}</code>
-                    </pre>
-                  );
-                }
-                
-                // Regular paragraphs
-                if (paragraph.trim()) {
-                  return (
-                    <p key={index} className="text-gray-300 mb-4">
-                      {paragraph}
-                    </p>
-                  );
-                }
-                
-                return null;
-              })}
-            </div>
+              {post.content}
+            </ReactMarkdown>
           </div>
 
           {/* Footer */}
