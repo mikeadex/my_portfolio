@@ -1,11 +1,33 @@
 'use client';
 
-import { projects } from '@/lib/data';
 import { useEffect, useRef, useState } from 'react';
+import type { Project } from '@/lib/types';
 
 export default function Projects() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const [visibleProjects, setVisibleProjects] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    fetch('/api/projects', {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        setProjects(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to fetch projects:', err);
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -16,14 +38,14 @@ export default function Projects() {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
     const elements = document.querySelectorAll('[data-project]');
     elements.forEach((el) => observerRef.current?.observe(el));
 
     return () => observerRef.current?.disconnect();
-  }, []);
+  }, [projects]);
 
   return (
     <section id="projects" className="pt-8 sm:pt-12 pb-12 sm:pb-20">
@@ -36,8 +58,14 @@ export default function Projects() {
         </h2>
       </div>
 
-      <div className="space-y-4 sm:space-y-6">
-        {projects.map((project, index) => (
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="inline-block w-8 h-8 border-4 border-[#ef233c] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <>
+        <div className="space-y-4 sm:space-y-6">
+          {projects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((project, index) => (
           <a
             key={project.id}
             href={project.liveUrl || project.githubUrl || '#'}
@@ -50,22 +78,26 @@ export default function Projects() {
             <div className="flex items-center gap-4 sm:gap-6 py-3 sm:py-4 hover:translate-x-2 transition-transform duration-300">
               {/* Project Thumbnail */}
               <div 
-                className={`w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 transition-all duration-700 ease-out ${
+                className={`w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 transition-all duration-500 ${
                   visibleProjects.has(`project-${project.id}`) 
-                    ? 'scale-100 rotate-0 opacity-100' 
-                    : 'scale-0 -rotate-[15deg] opacity-0'
+                    ? 'opacity-100 scale-100' 
+                    : 'opacity-0 scale-95'
                 }`}
                 style={{
                   boxShadow: '0 8px 32px rgba(239, 35, 60, 0.15), 0 0 48px rgba(239, 35, 60, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.05)'
                 }}
               >
-                <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
-                  {project.imageUrl ? (
-                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="font-bold text-2xl">{project.title.substring(0, 2)}</span>
-                  )}
-                </div>
+                {project.imageUrl ? (
+                  <img 
+                    src={project.imageUrl} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="font-bold text-2xl text-gray-500">{project.title.substring(0, 2)}</span>
+                  </div>
+                )}
               </div>
 
               {/* Project Info */}
@@ -90,7 +122,48 @@ export default function Projects() {
             </div>
           </a>
         ))}
-      </div>
+        </div>
+        
+        {/* Pagination */}
+        {projects.length > itemsPerPage && (
+          <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            
+            {Array.from({ length: Math.ceil(projects.length / itemsPerPage) }, (_, i) => i + 1).map(page => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-all ${
+                  currentPage === page 
+                    ? 'bg-[#ef233c] text-white' 
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            
+            <button
+              onClick={() => setCurrentPage(p => Math.min(Math.ceil(projects.length / itemsPerPage), p + 1))}
+              disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
+              className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        )}
+        </>
+      )}
     </section>
   );
 }

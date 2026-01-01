@@ -1,21 +1,37 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
-import { blogPosts } from '@/lib/data';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+async function getBlogPost(slug: string) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/blog/${slug}`, {
+    cache: 'no-store',
+  });
+  
+  if (!res.ok) {
+    return null;
+  }
+  
+  return res.json();
+}
+
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/blog`);
+  const posts = await res.json();
+  
+  return posts.map((post: any) => ({
     slug: post.slug,
   }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
 
   if (!post) {
     return {
@@ -31,7 +47,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function BlogPost({ params }: PageProps) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
 
   if (!post) {
     notFound();
@@ -56,6 +72,16 @@ export default async function BlogPost({ params }: PageProps) {
               {post.title}
             </h1>
 
+            {post.featuredImage && (
+              <div className="mb-6 rounded-lg overflow-hidden">
+                <img 
+                  src={post.featuredImage} 
+                  alt={post.title}
+                  className="w-full max-h-96 object-cover"
+                />
+              </div>
+            )}
+
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-400 mb-6">
               <div className="flex items-center gap-2">
                 <Calendar size={16} style={{ color: '#ef233c' }} />
@@ -74,7 +100,7 @@ export default async function BlogPost({ params }: PageProps) {
 
             {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag, index) => (
+                {post.tags.map((tag: string, index: number) => (
                   <span
                     key={index}
                     className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full border-2"
@@ -101,7 +127,7 @@ export default async function BlogPost({ params }: PageProps) {
                 lineHeight: '1.8'
               }}
             >
-              {post.content.split('\n\n').map((paragraph, index) => {
+              {post.content.split('\n\n').map((paragraph: string, index: number) => {
                 // Handle headings
                 if (paragraph.startsWith('# ')) {
                   return (
@@ -127,10 +153,10 @@ export default async function BlogPost({ params }: PageProps) {
                 
                 // Handle lists
                 if (paragraph.startsWith('- ') || paragraph.startsWith('* ')) {
-                  const items = paragraph.split('\n').filter(line => line.startsWith('- ') || line.startsWith('* '));
+                  const items = paragraph.split('\n').filter((line: string) => line.startsWith('- ') || line.startsWith('* '));
                   return (
                     <ul key={index} className="list-disc list-inside space-y-2 my-6">
-                      {items.map((item, i) => (
+                      {items.map((item: string, i: number) => (
                         <li key={i} className="text-gray-300">
                           {item.replace(/^[*-] /, '')}
                         </li>
@@ -141,10 +167,10 @@ export default async function BlogPost({ params }: PageProps) {
                 
                 // Handle numbered lists
                 if (/^\d+\./.test(paragraph)) {
-                  const items = paragraph.split('\n').filter(line => /^\d+\./.test(line));
+                  const items = paragraph.split('\n').filter((line: string) => /^\d+\./.test(line));
                   return (
                     <ol key={index} className="list-decimal list-inside space-y-2 my-6">
-                      {items.map((item, i) => (
+                      {items.map((item: string, i: number) => (
                         <li key={i} className="text-gray-300">
                           {item.replace(/^\d+\. /, '')}
                         </li>

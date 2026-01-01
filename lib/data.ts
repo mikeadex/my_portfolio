@@ -232,18 +232,18 @@ export const educationJourney: Education[] = [
 ];
 
 export const tools: Tool[] = [
-  { id: '1', name: 'Python', category: 'Programming Language', iconUrl: '/icons/python.png' },
-  { id: '2', name: 'Django', category: 'Backend Framework', iconUrl: '/icons/django.png' },
-  { id: '3', name: 'ReactJS', category: 'Frontend Library', iconUrl: '/icons/react.png' },
-  { id: '4', name: 'Next.js', category: 'React Framework', iconUrl: '/icons/nextjs.png' },
-  { id: '5', name: 'PostgreSQL', category: 'Database', iconUrl: '/icons/postgresql.png' },
-  { id: '6', name: 'APIs', category: 'Integration', iconUrl: '/icons/api.png' },
-  { id: '7', name: 'Stripe', category: 'Payment Integration', iconUrl: '/icons/stripe.png' },
-  { id: '8', name: 'AI Tools', category: 'Machine Learning', iconUrl: '/icons/ai.png' },
-  { id: '9', name: 'E-comm', category: 'Solutions', iconUrl: '/icons/ecommerce.png' },
-  { id: '10', name: 'WordPress', category: 'CMS Platform', iconUrl: '/icons/wordpress.png' },
-  { id: '11', name: 'HTML/CSS', category: 'Frontend', iconUrl: '/icons/html-css.png' },
-  { id: '12', name: 'JavaScript', category: 'Programming Language', iconUrl: '/icons/javascript.png' }
+  { id: '1', name: 'Python', category: 'Automation, APIs, data workflows', iconUrl: '/icons/python.png' },
+  { id: '2', name: 'Django', category: 'Secure backends, dashboards, admin systems', iconUrl: '/icons/django.png' },
+  { id: '3', name: 'ReactJS', category: 'Interactive UIs and component systems', iconUrl: '/icons/react.png' },
+  { id: '4', name: 'Next.js', category: 'SEO-ready web apps, fast performance', iconUrl: '/icons/nextjs.png' },
+  { id: '5', name: 'PostgreSQL', category: 'Reliable data modeling and reporting', iconUrl: '/icons/postgresql.png' },
+  { id: '6', name: 'APIs', category: 'Integrations (payments, CRM, forms, analytics)', iconUrl: '/icons/api.png' },
+  { id: '7', name: 'Stripe', category: 'Checkout, subscriptions, payment flows', iconUrl: '/icons/stripe.png' },
+  { id: '8', name: 'AI Tools', category: 'Content workflows, productivity, automation', iconUrl: '/icons/ai.png' },
+  { id: '9', name: 'E-comm', category: 'Product pages, funnels, conversion optimisation', iconUrl: '/icons/ecommerce.png' },
+  { id: '10', name: 'WordPress', category: 'Marketing sites, landing pages, CMS builds', iconUrl: '/icons/wordpress.png' },
+  { id: '11', name: 'HTML/CSS', category: 'Responsive UI, accessibility-first layouts', iconUrl: '/icons/html-css.png' },
+  { id: '12', name: 'JavaScript', category: 'Modern web development foundations', iconUrl: '/icons/javascript.png' }
 ];
 
 export const skills: Skill[] = [

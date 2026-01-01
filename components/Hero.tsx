@@ -34,22 +34,23 @@ export function HeroContent() {
           DEVELOPER
         </h1>
         <p className="text-gray-400 mt-4 sm:mt-6 lg:mt-8 text-base sm:text-lg lg:text-xl max-w-2xl leading-relaxed font-bold text-center lg:text-left">
-          Passionate about creating intuitive and engaging user experiences. Specialize in transforming ideas into beautifully crafted products.
+          I design and build fast, modern websites and web applications that don’t just look good, they perform.
+          From Django + PostgreSQL builds to Next.js/React frontends and WordPress delivery, I help businesses launch, improve conversions, and scale with SEO-ready structure, clean UX, and measurable growth.
         </p>
       </div>
 
       <div className="flex flex-wrap justify-center lg:justify-start gap-6 sm:gap-8 lg:gap-12">
         <div className="text-center lg:text-left">
-          <div className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-white mb-1 sm:mb-2">+12</div>
+          <div className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-white mb-1 sm:mb-2">13+</div>
           <div className="text-xs sm:text-sm text-gray-400 uppercase tracking-wider leading-tight font-bold">YEARS OF<br/>EXPERIENCE</div>
         </div>
         <div className="text-center lg:text-left">
-          <div className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-white mb-1 sm:mb-2">+46</div>
-          <div className="text-xs sm:text-sm text-gray-400 uppercase tracking-wider leading-tight font-bold">PROJECTS<br/>COMPLETED</div>
+          <div className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-white mb-1 sm:mb-2">200+</div>
+          <div className="text-xs sm:text-sm text-gray-400 uppercase tracking-wider leading-tight font-bold">PROJECTS<br/>SHIPPED</div>
         </div>
         <div className="text-center lg:text-left">
-          <div className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-white mb-1 sm:mb-2">+20</div>
-          <div className="text-xs sm:text-sm text-gray-400 uppercase tracking-wider leading-tight font-bold">WORLDWIDE<br/>CLIENTS</div>
+          <div className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-white mb-1 sm:mb-2">100+</div>
+          <div className="text-xs sm:text-sm text-gray-400 uppercase tracking-wider leading-tight font-bold">UK +<br/>GLOBAL</div>
         </div>
       </div>
 
@@ -67,7 +68,7 @@ export function HeroContent() {
               </svg>
             </div>
             <h3 className="text-white font-bold text-sm sm:text-base uppercase leading-tight tracking-wide">
-              DYNAMIC ANIMATION,<br/>MOTION DESIGN
+              CONVERSION-FOCUSED WEBSITES,<br/>SEO & LANDING PAGES
             </h3>
           </div>
           <div className="absolute bottom-6 right-6 w-10 h-10 border-2 border-white/30 rounded-xl flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/50 transition-all duration-300">
@@ -92,7 +93,7 @@ export function HeroContent() {
               </svg>
             </div>
             <h3 className="text-white font-bold text-sm sm:text-base uppercase leading-tight tracking-wide">
-              FRAMER, FIGMA,<br/>WORDPRESS, REACT.JS
+              DJANGO, NEXT.JS, WORDPRESS,<br/>PAID ADS & SOCIAL STRATEGY
             </h3>
           </div>
           <div className="absolute bottom-6 right-6 w-10 h-10 border-2 border-white/30 rounded-xl flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/50 transition-all duration-300">
@@ -126,7 +127,7 @@ export default function Hero() {
 
           <div className="relative aspect-[2.5/2.8] w-[80%] sm:w-full mx-auto bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl sm:rounded-3xl overflow-hidden">
             <img 
-              src="/images/mike2.jpg" 
+              src="/images/mike.jpg" 
               alt="Michael Adeleye" 
               className="w-full h-full object-cover"
             />
@@ -151,7 +152,7 @@ export default function Hero() {
           </div> */}
 
           <p className="text-base sm:text-base lg:text-lg text-gray-600 text-center leading-snug px-1 sm:px-2 lg:px-4 relative z-10 font-black">
-            A Software Engineer who has developed countless innovative solutions.
+            Full-Stack Developer & Digital Growth Strategist building high-converting websites and web apps.
           </p>
 
           <div className="flex justify-center gap-2 sm:gap-3 lg:gap-4 pt-1 sm:pt-2 lg:pt-4 relative z-10">

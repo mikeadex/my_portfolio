@@ -1,8 +1,32 @@
 'use client';
 
-import { blogPosts } from '@/lib/data';
+import { useState, useEffect } from 'react';
+import type { BlogPost } from '@/lib/types';
 
 export default function Thoughts() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  useEffect(() => {
+    fetch('/api/blog', {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        setBlogPosts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to fetch blog posts:', err);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <section id="thoughts" className="pt-8 sm:pt-12 pb-12 sm:pb-20">
       <div className="mb-8 sm:mb-10 lg:mb-16">
@@ -14,15 +38,21 @@ export default function Thoughts() {
         </h2>
       </div>
 
-      <div className="space-y-6 sm:space-y-8">
-        {blogPosts.map((post) => (
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="inline-block w-8 h-8 border-4 border-[#ef233c] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <>
+        <div className="space-y-6 sm:space-y-8">
+          {blogPosts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((post) => (
           <a
             key={post.id}
             href={`/blog/${post.slug}`}
             className="group block"
           >
             <article className="py-4 sm:py-6 border-b border-gray-800 hover:border-[#ef233c] transition-colors">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-6">
                 <div className="flex-1 min-w-0">
                   <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2 sm:mb-3 transition-colors font-[family-name:var(--font-poppins)]" onMouseEnter={(e) => e.currentTarget.style.color = '#ef233c'} onMouseLeave={(e) => e.currentTarget.style.color = '#ffffff'}>
                     {post.title}
@@ -48,7 +78,48 @@ export default function Thoughts() {
             </article>
           </a>
         ))}
-      </div>
+        </div>
+        
+        {/* Pagination */}
+        {blogPosts.length > itemsPerPage && (
+          <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            
+            {Array.from({ length: Math.ceil(blogPosts.length / itemsPerPage) }, (_, i) => i + 1).map(page => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-all ${
+                  currentPage === page 
+                    ? 'bg-[#ef233c] text-white' 
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            
+            <button
+              onClick={() => setCurrentPage(p => Math.min(Math.ceil(blogPosts.length / itemsPerPage), p + 1))}
+              disabled={currentPage === Math.ceil(blogPosts.length / itemsPerPage)}
+              className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        )}
+        </>
+      )}
     </section>
   );
 }

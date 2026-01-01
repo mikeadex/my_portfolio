@@ -9,11 +9,37 @@ export default function Contact() {
     budget: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+    setNotification(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setNotification({ type: 'success', message: 'Thank you! Your message has been sent successfully.' });
+        setFormData({ name: '', email: '', budget: '', message: '' });
+      } else {
+        setNotification({ type: 'error', message: data.error || 'Failed to send message. Please try again.' });
+      }
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Failed to send message. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setNotification(null), 5000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -33,6 +59,19 @@ export default function Contact() {
           TOGETHER
         </h2>
       </div>
+
+      {/* Notification */}
+      {notification && (
+        <div 
+          className={`max-w-3xl mb-6 p-4 rounded-xl ${
+            notification.type === 'success' 
+              ? 'bg-green-500/10 border border-green-500 text-green-500' 
+              : 'bg-red-500/10 border border-red-500 text-red-500'
+          }`}
+        >
+          {notification.message}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -107,12 +146,13 @@ export default function Contact() {
 
         <button
           type="submit"
-          className="w-full font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+          disabled={isSubmitting}
+          className="w-full font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           style={{backgroundColor: '#ef233c', color: '#ffffff'}}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d41f35'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ef233c'}
+          onMouseEnter={(e) => !isSubmitting && (e.currentTarget.style.backgroundColor = '#d41f35')}
+          onMouseLeave={(e) => !isSubmitting && (e.currentTarget.style.backgroundColor = '#ef233c')}
         >
-          Submit
+          {isSubmitting ? 'Sending...' : 'Submit'}
         </button>
       </form>
     </section>

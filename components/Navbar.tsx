@@ -18,23 +18,26 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['home', 'projects', 'education', 'tools', 'thoughts', 'contact'];
-      const scrollPosition = window.scrollY + 200;
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
 
+      let currentSection = 'home';
+      
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetBottom = offsetTop + element.offsetHeight;
-
-          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-            setActiveSection(section);
-            break;
+          const rect = element.getBoundingClientRect();
+          const offsetTop = window.scrollY + rect.top;
+          
+          if (scrollPosition >= offsetTop) {
+            currentSection = section;
           }
         }
       }
+      
+      setActiveSection(currentSection);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
@@ -55,11 +58,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-1/2 -translate-x-1/2 z-50 py-4 px-4">
+    <nav className="sticky top-0 z-50 bg-[#0a0a0a] py-4 px-4 border-b border-gray-800">
       <div 
-        className="flex items-center gap-2 px-4 py-3 rounded-full backdrop-blur-xl border border-gray-700/50 shadow-2xl"
+        className="max-w-7xl mx-auto flex items-center justify-center gap-2 px-4 py-3 rounded-full backdrop-blur-xl border border-gray-700/50 shadow-2xl"
         style={{
-          backgroundColor: 'rgba(21, 19, 18, 0.95)',
+          backgroundColor: 'rgba(10, 10, 10, 0.95)',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 48px rgba(239, 35, 60, 0.1)'
         }}
       >
