@@ -268,22 +268,22 @@ export const skills: Skill[] = [
 export const socialLinks: SocialLink[] = [
   {
     name: 'GitHub',
-    url: 'https://github.com/yourusername',
+    url: 'https://github.com/mikeadex',
     icon: 'github'
   },
   {
     name: 'LinkedIn',
-    url: 'https://linkedin.com/in/yourusername',
+    url: 'https://linkedin.com/in/michaeladeleye1',
     icon: 'linkedin'
   },
   {
     name: 'Twitter',
-    url: 'https://twitter.com/yourusername',
+    url: 'https://twitter.com/247mediauk',
     icon: 'twitter'
   },
   {
     name: 'Email',
-    url: 'mailto:your.email@example.com',
+    url: 'mailto:support@creativemikestudios.com',
     icon: 'mail'
   }
 ];
