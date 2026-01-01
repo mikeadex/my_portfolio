@@ -35,8 +35,36 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   return {
-    title: `${post.title} | Blog`,
+    title: post.title,
     description: post.description,
+    keywords: post.tags,
+    authors: [{ name: post.author || 'Michael Adeleye' }],
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: 'article',
+      publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt,
+      authors: [post.author || 'Michael Adeleye'],
+      tags: post.tags,
+      images: post.featuredImage ? [
+        {
+          url: post.featuredImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        }
+      ] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      images: post.featuredImage ? [post.featuredImage] : [],
+    },
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 
@@ -48,8 +76,40 @@ export default async function BlogPost({ params }: PageProps) {
     notFound();
   }
 
+  // JSON-LD structured data for blog post
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    image: post.featuredImage,
+    datePublished: post.createdAt,
+    dateModified: post.updatedAt,
+    author: {
+      '@type': 'Person',
+      name: post.author || 'Michael Adeleye',
+      url: 'https://mikeadeleye.dev',
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Michael Adeleye',
+      url: 'https://mikeadeleye.dev',
+    },
+    keywords: post.tags?.join(', '),
+    articleBody: post.content,
+    url: `https://mikeadeleye.dev/blog/${slug}`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://mikeadeleye.dev/blog/${slug}`,
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-[#151312]">
+    <div className=\"min-h-screen bg-[#151312]\">
+      <script
+        type=\"application/ld+json\"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <main className="px-4 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-20">
         <article className="max-w-4xl mx-auto">
           {/* Back Button */}
@@ -63,32 +123,34 @@ export default async function BlogPost({ params }: PageProps) {
 
           {/* Header */}
           <header className="mb-8 sm:mb-12">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight font-[family-name:var(--font-poppins)]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight font-[family-name:var(--font-poppins)]" itemProp="headline">
               {post.title}
             </h1>
 
             {post.featuredImage && (
-              <div className="mb-6 rounded-lg overflow-hidden">
+              <div className="mb-6 rounded-lg overflow-hidden" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
                 <img 
                   src={post.featuredImage} 
                   alt={post.title}
                   className="w-full max-h-96 object-cover"
+                  itemProp="url"
                 />
+                <meta itemProp="caption" content={post.title} />
               </div>
             )}
 
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-400 mb-6">
               <div className="flex items-center gap-2">
                 <Calendar size={16} style={{ color: '#ef233c' }} />
-                <span>{post.date}</span>
+                <time dateTime={post.createdAt} itemProp="datePublished">{post.date}</time>
               </div>
               <div className="flex items-center gap-2">
                 <Clock size={16} style={{ color: '#ef233c' }} />
-                <span>{post.readTime}</span>
+                <span itemProp="timeRequired">{post.readTime}</span>
               </div>
               {post.author && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">{post.author}</span>
+                <div className="flex items-center gap-2" itemProp="author" itemScope itemType="https://schema.org/Person">
+                  <span className="font-medium text-white" itemProp="name">{post.author}</span>
                 </div>
               )}
             </div>
@@ -104,6 +166,7 @@ export default async function BlogPost({ params }: PageProps) {
                       color: '#ef233c',
                       backgroundColor: 'rgba(239, 35, 60, 0.1)'
                     }}
+                    itemProp="keywords"
                   >
                     <Tag size={12} />
                     {tag}
@@ -114,7 +177,7 @@ export default async function BlogPost({ params }: PageProps) {
           </header>
 
           {/* Content */}
-          <div className="prose prose-invert prose-lg max-w-none">
+          <div className="prose prose-invert prose-lg max-w-none" itemProp="articleBody">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{

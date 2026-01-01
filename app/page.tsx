@@ -9,8 +9,42 @@ import Navbar from '@/components/Navbar';
 import LoadingAnimation from '@/components/LoadingAnimation';
 
 export default function Home() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Michael Adeleye',
+    url: 'https://mikeadeleye.dev',
+    image: 'https://mikeadeleye.dev/profile.jpg',
+    jobTitle: 'Full-Stack Software Developer',
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Creative Mike Studios',
+    },
+    sameAs: [
+      'https://github.com/mikeadeleye',
+      'https://linkedin.com/in/mikeadeleye',
+      'https://twitter.com/mikeadeleye',
+    ],
+    knowsAbout: [
+      'Web Development',
+      'React',
+      'Next.js',
+      'TypeScript',
+      'Node.js',
+      'JavaScript',
+      'Full-Stack Development',
+      'UI/UX Design',
+      'Cloud Computing',
+    ],
+    description: 'Full-stack software developer specializing in modern web applications with expertise in React, Next.js, TypeScript, and Node.js.',
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <LoadingAnimation />
       <div className="min-h-screen bg-[#0a0a0a]">
         <Navbar />

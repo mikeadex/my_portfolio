@@ -25,14 +25,70 @@ const notoSansSC = Noto_Sans_SC({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio | Software Developer",
-  description: "Professional portfolio showcasing my skills, projects, and experience as a software developer. Specializing in modern web development with React, Next.js, and TypeScript.",
-  keywords: ["software developer", "web developer", "portfolio", "React", "Next.js", "TypeScript"],
-  authors: [{ name: "Your Name" }],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  title: {
+    default: 'Michael Adeleye | Full-Stack Software Developer & Designer',
+    template: '%s | Michael Adeleye'
+  },
+  description: 'Full-stack software developer specializing in modern web applications. Expert in React, Next.js, TypeScript, Node.js, and cloud technologies. Building scalable, performant solutions for businesses.',
+  keywords: [
+    'Michael Adeleye',
+    'Software Developer',
+    'Full-Stack Developer',
+    'Web Developer',
+    'React Developer',
+    'Next.js Developer',
+    'TypeScript',
+    'Node.js',
+    'JavaScript',
+    'Frontend Developer',
+    'Backend Developer',
+    'UI/UX Designer',
+    'Portfolio',
+    'Creative Mike Studios'
+  ],
+  authors: [{ name: 'Michael Adeleye', url: 'https://mikeadeleye.dev' }],
+  creator: 'Michael Adeleye',
+  publisher: 'Michael Adeleye',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
-    title: "Portfolio | Software Developer",
-    description: "Professional portfolio showcasing my skills and projects",
-    type: "website",
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://mikeadeleye.dev',
+    siteName: 'Michael Adeleye Portfolio',
+    title: 'Michael Adeleye | Full-Stack Software Developer & Designer',
+    description: 'Full-stack software developer specializing in modern web applications. Expert in React, Next.js, TypeScript, Node.js, and cloud technologies.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Michael Adeleye - Software Developer',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Michael Adeleye | Full-Stack Software Developer',
+    description: 'Full-stack software developer specializing in modern web applications.',
+    creator: '@mikeadeleye',
+    images: ['/og-image.jpg'],
+  },
+  verification: {
+    google: 'your-google-site-verification',
+  },
+  alternates: {
+    canonical: 'https://mikeadeleye.dev',
   },
 };
 
