@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -17,16 +20,6 @@ async function getBlogPost(slug: string) {
   }
   
   return res.json();
-}
-
-export async function generateStaticParams() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/blog`);
-  const posts = await res.json();
-  
-  return posts.map((post: any) => ({
-    slug: post.slug,
-  }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
