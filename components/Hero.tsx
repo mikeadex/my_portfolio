@@ -127,7 +127,7 @@ export default function Hero() {
 
           <div className="relative aspect-[2.5/2.8] w-[80%] sm:w-full mx-auto bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl sm:rounded-3xl overflow-hidden">
             <img 
-              src="/images/mike.jpg" 
+              src="/images/mike1.jpg" 
               alt="Michael Adeleye" 
               className="w-full h-full object-cover"
             />

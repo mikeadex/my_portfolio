@@ -92,7 +92,7 @@ export default async function BlogPost({ params }: PageProps) {
     },
     publisher: {
       '@type': 'Person',
-      name: 'Michael Adeleye',
+      name: ' Adeleye',
       url: 'https://mikeadeleye.dev',
     },
     keywords: post.tags?.join(', '),
