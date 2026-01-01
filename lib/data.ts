@@ -210,23 +210,23 @@ Remember: every millisecond counts!
 export const educationJourney: Education[] = [
   {
     id: '1',
-    institution: 'Code Institute',
+    institution: 'Code Institute | WAES London',
     description: 'Full Stack Software Development Certificate. Comprehensive program covering frontend and backend technologies. (Phew... Glad I finished!)',
-    period: 'Completed 2023',
+    period: 'Completed 2025',
     url: '#'
   },
   {
     id: '2',
     institution: '42 London',
     description: 'Peer-to-peer learning in software engineering. Great foundation and invaluable experience, but decided to pursue a different path.',
-    period: '2021 - 2022',
+    period: '2023 - 2024',
     url: '#'
   },
   {
     id: '3',
     institution: 'Self-Taught Journey',
     description: 'Started my programming journey through online platforms including Udemy and Coursera. Built strong fundamentals in web development, JavaScript, and modern frameworks.',
-    period: '2018 - 2021',
+    period: 'Ongoing since 2003' ,
     url: '#'
   }
 ];
