@@ -7,7 +7,7 @@ export default function Tools() {
     <section id="tools" className="pt-8 sm:pt-12 pb-12 sm:pb-20">
       <div className="mb-8 sm:mb-10 lg:mb-16">
         <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black text-white leading-[0.95] mb-0 font-[family-name:var(--font-poppins)] text-center lg:text-left">
-          PREMIUM
+          SKILLS &
         </h2>
         <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] font-[family-name:var(--font-poppins)] text-center lg:text-left" style={{color: '#353334'}}>
           TOOLS
