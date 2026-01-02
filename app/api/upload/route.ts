@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
+import { put } from '@vercel/blob';
 import { requireAuth } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
@@ -34,29 +33,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create upload directory if it doesn't exist
-    const uploadDir = join(process.cwd(), 'public', type === 'blog' ? 'blog' : 'projects');
-    try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (err) {
-      // Directory might already exist
-    }
-
-    // Generate unique filename
+    // Generate unique filename with folder structure
     const timestamp = Date.now();
     const fileExt = file.name.split('.').pop();
-    const filename = `${timestamp}.${fileExt}`;
-    const filepath = join(uploadDir, filename);
+    const filename = `${type === 'blog' ? 'blog' : 'projects'}/${timestamp}.${fileExt}`;
 
-    // Convert file to buffer and write
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filepath, buffer);
+    // Upload to Vercel Blob
+    const blob = await put(filename, file, {
+      access: 'public',
+      addRandomSuffix: false,
+    });
 
-    // Return public URL
-    const publicUrl = `/${type === 'blog' ? 'blog' : 'projects'}/${filename}`;
-
-    return NextResponse.json({ url: publicUrl });
+    // Return the blob URL
+    return NextResponse.json({ url: blob.url });
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json(

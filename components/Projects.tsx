@@ -102,9 +102,12 @@ export default function Projects() {
 
               {/* Project Info */}
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-0.5 sm:mb-1 group-hover:text-gray-300 transition-colors">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-1.5 group-hover:text-gray-300 transition-colors">
                   {project.title}
                 </h3>
+                <p className="text-xs sm:text-sm text-gray-300 mb-1 sm:mb-2 line-clamp-2">
+                  {project.description}
+                </p>
                 <p className="text-xs sm:text-sm text-gray-400 line-clamp-1 font-medium">
                   {project.technologies.join(' • ')}
                 </p>
