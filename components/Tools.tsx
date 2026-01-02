@@ -1,18 +1,15 @@
 'use client';
 
+import Image from 'next/image';
 import { tools } from '@/lib/data';
 
 export default function Tools() {
   return (
     <section id="tools" className="pt-8 sm:pt-12 pb-12 sm:pb-20">
-      <div className="mb-8 sm:mb-10 lg:mb-16">
-        <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black text-white leading-[0.95] mb-0 font-[family-name:var(--font-poppins)] text-center lg:text-left">
-          SKILLS &
-        </h2>
-        <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] font-[family-name:var(--font-poppins)] text-center lg:text-left" style={{color: '#353334'}}>
-          TOOLS
-        </h2>
-      </div>
+      <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] mb-8 sm:mb-10 lg:mb-16 font-[family-name:var(--font-poppins)] text-center lg:text-left">
+        <span className="text-white block">SKILLS &</span>
+        <span className="block" style={{color: '#353334'}}>TOOLS</span>
+      </h2>
 
       <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
         {tools.map((tool) => (
@@ -31,9 +28,11 @@ export default function Tools() {
           >
             <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:bg-[#ef233c] transition-colors duration-300">
               {tool.iconUrl ? (
-                <img 
+                <Image 
                   src={tool.iconUrl} 
                   alt={tool.name}
+                  width={48}
+                  height={48}
                   className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain group-hover:brightness-0 group-hover:invert transition-all"
                 />
               ) : (

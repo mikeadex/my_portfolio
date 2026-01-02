@@ -27,11 +27,9 @@ export function HeroContent() {
   return (
     <div className="space-y-8 sm:space-y-12 pb-8 sm:pb-12">
       <div>
-        <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black text-white leading-[0.95] mb-0 font-[family-name:var(--font-poppins)] text-center lg:text-left">
-          FULLSTACK
-        </h1>
-        <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] font-[family-name:var(--font-poppins)] text-center lg:text-left" style={{color: '#353334'}}>
-          DEVELOPER
+        <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] mb-0 font-[family-name:var(--font-poppins)] text-center lg:text-left">
+          <span className="text-white block">FULLSTACK</span>
+          <span className="block" style={{color: '#353334'}}>DEVELOPER</span>
         </h1>
         <p className="text-gray-400 mt-4 sm:mt-6 lg:mt-8 text-base sm:text-lg lg:text-xl max-w-2xl leading-relaxed font-bold text-center lg:text-left">
           I design and build fast, modern websites and web applications that don’t just look good, they perform.

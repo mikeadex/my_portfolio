@@ -21,6 +21,7 @@ export default function Header() {
           <button
             onClick={() => scrollToSection('hero')}
             className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            aria-label="Navigate to home section"
           >
             Portfolio
           </button>
@@ -55,6 +56,8 @@ export default function Header() {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden p-2 text-gray-700 dark:text-gray-300"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

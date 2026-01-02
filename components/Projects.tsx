@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import type { Project } from '@/lib/types';
 
 export default function Projects() {
@@ -49,14 +50,10 @@ export default function Projects() {
 
   return (
     <section id="projects" className="pt-8 sm:pt-12 pb-12 sm:pb-20">
-      <div className="mb-8 sm:mb-10 lg:mb-16">
-        <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black text-white leading-[0.95] mb-0 font-[family-name:var(--font-poppins)] text-center lg:text-left">
-          RECENT
-        </h2>
-        <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] font-[family-name:var(--font-poppins)] text-center lg:text-left" style={{color: '#353334'}}>
-          PROJECTS
-        </h2>
-      </div>
+      <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl font-black leading-[0.95] mb-8 sm:mb-10 lg:mb-16 font-[family-name:var(--font-poppins)] text-center lg:text-left">
+        <span className="text-white block">RECENT</span>
+        <span className="block" style={{color: '#353334'}}>PROJECTS</span>
+      </h2>
 
       {loading ? (
         <div className="text-center py-12">
@@ -88,10 +85,13 @@ export default function Projects() {
                 }}
               >
                 {project.imageUrl ? (
-                  <img 
+                  <Image 
                     src={project.imageUrl} 
-                    alt={project.title} 
+                    alt={project.title}
+                    width={128}
+                    height={128}
                     className="w-full h-full object-cover"
+                    priority={index < 2}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
@@ -134,8 +134,9 @@ export default function Projects() {
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              aria-label="Previous page"
             >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -149,6 +150,8 @@ export default function Projects() {
                     ? 'bg-[#ef233c] text-white' 
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                 }`}
+                aria-label={`Go to page ${page}`}
+                aria-current={currentPage === page ? 'page' : undefined}
               >
                 {page}
               </button>
@@ -158,8 +161,9 @@ export default function Projects() {
               onClick={() => setCurrentPage(p => Math.min(Math.ceil(projects.length / itemsPerPage), p + 1))}
               disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
               className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              aria-label="Next page"
             >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
