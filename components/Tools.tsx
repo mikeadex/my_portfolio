@@ -12,11 +12,12 @@ export default function Tools() {
       </h2>
 
       <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-        {tools.map((tool) => (
+        {tools.map((tool, index) => (
           <div
             key={tool.id}
-            className="group p-4 sm:p-6 lg:p-8 flex items-center gap-3 sm:gap-4 md:gap-6 hover:scale-[1.02] transition-all duration-300 rounded-xl sm:rounded-2xl border-2 border-transparent hover:border-[#ef233c]"
-            style={{
+            className="group p-4 sm:p-6 lg:p-8 flex items-center gap-3 sm:gap-4 md:gap-6 hover:scale-[1.02] transition-all duration-300 rounded-xl sm:rounded-2xl border-2 border-transparent hover:border-[#ef233c] lazy-load"
+            style={{ 
+              animationDelay: `${index * 0.05}s`,
               boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)'
             }}
             onMouseEnter={(e) => {
@@ -34,6 +35,8 @@ export default function Tools() {
                   width={48}
                   height={48}
                   className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain group-hover:brightness-0 group-hover:invert transition-all"
+                  loading="lazy"
+                  onLoad={(e) => e.currentTarget.classList.add('loaded')}
                 />
               ) : (
                 <span className="text-lg sm:text-2xl lg:text-3xl font-black text-gray-800">

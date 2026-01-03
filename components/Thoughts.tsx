@@ -9,6 +9,18 @@ export default function Thoughts() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+  const scrollToSection = () => {
+    const section = document.getElementById('thoughts');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    scrollToSection();
+  };
+
   useEffect(() => {
     fetch('/api/blog', {
       cache: 'no-store',
@@ -41,11 +53,12 @@ export default function Thoughts() {
       ) : (
         <>
         <div className="space-y-6 sm:space-y-8">
-          {blogPosts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((post) => (
+          {blogPosts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((post, index) => (
           <a
             key={post.id}
             href={`/blog/${post.slug}`}
-            className="group block"
+            className="group block lazy-load"
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
             <article className="py-4 sm:py-6 border-b border-gray-800 hover:border-[#ef233c] transition-colors">
               <div className="flex items-start gap-6">
@@ -80,7 +93,7 @@ export default function Thoughts() {
         {blogPosts.length > itemsPerPage && (
           <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
             <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
               className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               aria-label="Previous page"
@@ -93,7 +106,7 @@ export default function Thoughts() {
             {Array.from({ length: Math.ceil(blogPosts.length / itemsPerPage) }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => handlePageChange(page)}
                 className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-all ${
                   currentPage === page 
                     ? 'bg-[#ef233c] text-white' 
@@ -107,7 +120,7 @@ export default function Thoughts() {
             ))}
             
             <button
-              onClick={() => setCurrentPage(p => Math.min(Math.ceil(blogPosts.length / itemsPerPage), p + 1))}
+              onClick={() => handlePageChange(Math.min(Math.ceil(blogPosts.length / itemsPerPage), currentPage + 1))}
               disabled={currentPage === Math.ceil(blogPosts.length / itemsPerPage)}
               className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               aria-label="Next page"

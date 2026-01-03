@@ -12,6 +12,18 @@ export default function Projects() {
   const itemsPerPage = 5;
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  const scrollToSection = () => {
+    const section = document.getElementById('projects');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    scrollToSection();
+  };
+
   useEffect(() => {
     fetch('/api/projects', {
       cache: 'no-store',
@@ -90,8 +102,10 @@ export default function Projects() {
                     alt={project.title}
                     width={128}
                     height={128}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-opacity duration-300"
+                    loading={index < 2 ? 'eager' : 'lazy'}
                     priority={index < 2}
+                    onLoad={(e) => e.currentTarget.classList.add('loaded')}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
@@ -131,7 +145,7 @@ export default function Projects() {
         {projects.length > itemsPerPage && (
           <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
             <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
               className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               aria-label="Previous page"
@@ -144,7 +158,7 @@ export default function Projects() {
             {Array.from({ length: Math.ceil(projects.length / itemsPerPage) }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => handlePageChange(page)}
                 className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-all ${
                   currentPage === page 
                     ? 'bg-[#ef233c] text-white' 
@@ -158,7 +172,7 @@ export default function Projects() {
             ))}
             
             <button
-              onClick={() => setCurrentPage(p => Math.min(Math.ceil(projects.length / itemsPerPage), p + 1))}
+              onClick={() => handlePageChange(Math.min(Math.ceil(projects.length / itemsPerPage), currentPage + 1))}
               disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
               className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               aria-label="Next page"

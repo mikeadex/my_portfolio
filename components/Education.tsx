@@ -11,13 +11,14 @@ export default function Education() {
       </h2>
 
       <div className="space-y-8 sm:space-y-12">
-        {educationJourney.map((item) => (
+        {educationJourney.map((item, index) => (
           <a
             key={item.id}
             href={item.url || '#'}
             target="_blank"
             rel="noopener noreferrer"
-            className="group block"
+            className="group block lazy-load"
+            style={{ animationDelay: `${index * 0.15}s` }}
           >
             <article className="relative border-b border-gray-800 pb-6 sm:pb-8 group-hover:border-[#ef233c] transition-colors">
               <div className="flex items-start justify-between gap-4 mb-3 sm:mb-4">
