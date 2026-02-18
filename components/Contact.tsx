@@ -60,6 +60,41 @@ export default function Contact() {
         </h2>
       </div>
 
+      {/* Recruiter/Contractor Quick Contact */}
+      <div className="bg-black border border-gray-700 rounded-2xl p-6 mb-8 max-w-3xl">
+        <h3 className="text-xl font-bold text-white mb-3">For Recruiters & Contract Hiring</h3>
+        <p className="text-gray-400 text-sm mb-4">Quick access for contract opportunities and recruitment enquiries</p>
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="mailto:support@creativemikestudios.com"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#ef233c] text-white text-sm font-bold rounded-lg hover:bg-[#d41f35] transition-all"
+          >
+            Email Me
+          </a>
+          <a
+            href="/cv/michael-adeleye-cv.pdf"
+            download
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white text-sm font-bold rounded-lg hover:bg-gray-600 transition-all"
+          >
+            Download CV
+          </a>
+          <a
+            href="https://linkedin.com/in/michaeladeleye1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white text-sm font-bold rounded-lg hover:bg-gray-600 transition-all"
+          >
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
+      {/* Project Client Form */}
+      <div className="mb-4">
+        <h3 className="text-xl font-bold text-white mb-2">Project Enquiry Form</h3>
+        <p className="text-gray-400 text-sm">For project-based work and client enquiries</p>
+      </div>
+
       {/* Notification */}
       {notification && (
         <div 

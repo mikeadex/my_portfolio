@@ -6,6 +6,13 @@ export interface Project {
   githubUrl?: string;
   liveUrl?: string;
   imageUrl?: string;
+  projectType?: string;
+  problem?: string;
+  solution?: string;
+  outcome?: string;
+  role?: string;
+  featured?: boolean;
+  order?: number;
 }
 
 export interface SocialLink {

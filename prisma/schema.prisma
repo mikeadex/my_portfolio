@@ -45,6 +45,11 @@ model Project {
   githubUrl    String?
   liveUrl      String?
   imageUrl     String?
+  projectType  String?
+  problem      String?  @db.Text
+  solution     String?  @db.Text
+  outcome      String?  @db.Text
+  role         String?
   featured     Boolean  @default(false)
   order        Int      @default(0)
   createdAt    DateTime @default(now())

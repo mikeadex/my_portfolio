@@ -1,4 +1,5 @@
 import Hero, { HeroContent } from '@/components/Hero';
+import ContractReady from '@/components/ContractReady';
 import Projects from '@/components/Projects';
 import Thoughts from '@/components/Thoughts';
 import Education from '@/components/Education';
@@ -53,6 +54,7 @@ export default function Home() {
           <Hero />
           <div className="space-y-12 w-full lg:flex-1">
             <HeroContent />
+            <ContractReady />
             <Projects />
             <Education />
             <Tools />

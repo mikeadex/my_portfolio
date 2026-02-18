@@ -38,7 +38,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Apr 8, 2022',
     readTime: '6min read',
     tags: ['Career', 'Web Development', 'Beginner'],
-    author: 'Your Name',
+    author: 'Michael Adeleye',
     content: `
 # Starting and Growing a Career in Web Development
 
@@ -80,7 +80,7 @@ Starting a career in web development is an exciting journey filled with opportun
     date: 'Mar 15, 2022',
     readTime: '6min read',
     tags: ['Design', 'Marketing', 'Conversion'],
-    author: 'Your Name',
+    author: 'Michael Adeleye',
     content: `
 # Create a Landing Page That Performs Great
 
@@ -131,7 +131,7 @@ Creating a landing page that converts is both an art and a science. By following
     date: 'Feb 20, 2022',
     readTime: '8min read',
     tags: ['Performance', 'SEO', 'Optimization'],
-    author: 'Your Name',
+    author: 'Michael Adeleye',
     content: `
 # How to Optimize Your Website for Better Performance
 

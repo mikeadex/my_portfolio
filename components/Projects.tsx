@@ -1,64 +1,39 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import type { Project } from '@/lib/types';
+import { prisma } from '@/lib/prisma';
+import ProjectsClient from './ProjectsClient';
 
-export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [visibleProjects, setVisibleProjects] = useState<Set<string>>(new Set());
-  const [currentPage, setCurrentPage] = useState(1);
+async function getProjects(): Promise<Project[]> {
+  try {
+    const projects = await prisma.project.findMany({
+      where: { featured: true },
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+    });
+    return projects.map(p => ({
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      technologies: p.technologies,
+      githubUrl: p.githubUrl || undefined,
+      liveUrl: p.liveUrl || undefined,
+      imageUrl: p.imageUrl || undefined,
+      projectType: p.projectType || undefined,
+      problem: p.problem || undefined,
+      solution: p.solution || undefined,
+      outcome: p.outcome || undefined,
+      role: p.role || undefined,
+      featured: p.featured,
+      order: p.order,
+    }));
+  } catch (error) {
+    console.error('Failed to fetch projects:', error);
+    return [];
+  }
+}
+
+export default async function Projects() {
+  const projects = await getProjects();
   const itemsPerPage = 5;
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const scrollToSection = () => {
-    const section = document.getElementById('projects');
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-    scrollToSection();
-  };
-
-  useEffect(() => {
-    fetch('/api/projects', {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache',
-      },
-    })
-      .then(res => res.json())
-      .then(data => {
-        setProjects(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to fetch projects:', err);
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleProjects((prev) => new Set(prev).add(entry.target.id));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('[data-project]');
-    elements.forEach((el) => observerRef.current?.observe(el));
-
-    return () => observerRef.current?.disconnect();
-  }, [projects]);
 
   return (
     <section id="projects" className="pt-8 sm:pt-12 pb-12 sm:pb-20">
@@ -67,14 +42,14 @@ export default function Projects() {
         <span className="block" style={{color: '#353334'}}>PROJECTS</span>
       </h2>
 
-      {loading ? (
+      {projects.length === 0 ? (
         <div className="text-center py-12">
-          <div className="inline-block w-8 h-8 border-4 border-[#ef233c] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-400">No projects available at the moment.</p>
         </div>
       ) : (
         <>
         <div className="space-y-4 sm:space-y-6">
-          {projects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((project, index) => (
+          {projects.slice(0, itemsPerPage).map((project, index) => (
           <a
             key={project.id}
             href={project.liveUrl || project.githubUrl || '#'}
@@ -83,15 +58,12 @@ export default function Projects() {
             className="group block"
             data-project
             id={`project-${project.id}`}
+            itemScope
+            itemType="https://schema.org/CreativeWork"
           >
             <div className="flex items-center gap-4 sm:gap-6 py-3 sm:py-4 hover:translate-x-2 transition-transform duration-300">
-              {/* Project Thumbnail */}
               <div 
-                className={`w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 transition-all duration-500 ${
-                  visibleProjects.has(`project-${project.id}`) 
-                    ? 'opacity-100 scale-100' 
-                    : 'opacity-0 scale-95'
-                }`}
+                className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 transition-all duration-500"
                 style={{
                   boxShadow: '0 8px 32px rgba(239, 35, 60, 0.15), 0 0 48px rgba(239, 35, 60, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.05)'
                 }}
@@ -102,10 +74,9 @@ export default function Projects() {
                     alt={project.title}
                     width={128}
                     height={128}
-                    className="w-full h-full object-cover transition-opacity duration-300"
+                    className="w-full h-full object-cover"
                     loading={index < 2 ? 'eager' : 'lazy'}
                     priority={index < 2}
-                    onLoad={(e) => e.currentTarget.classList.add('loaded')}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
@@ -114,20 +85,18 @@ export default function Projects() {
                 )}
               </div>
 
-              {/* Project Info */}
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-1.5 group-hover:text-gray-300 transition-colors">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-1.5 group-hover:text-gray-300 transition-colors" itemProp="name">
                   {project.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-300 mb-1 sm:mb-2 line-clamp-2">
+                <p className="text-xs sm:text-sm text-gray-300 mb-1 sm:mb-2 line-clamp-2" itemProp="description">
                   {project.description}
                 </p>
-                <p className="text-xs sm:text-sm text-gray-400 line-clamp-1 font-medium">
+                <p className="text-xs sm:text-sm text-gray-400 line-clamp-1 font-medium" itemProp="keywords">
                   {project.technologies.join(' • ')}
                 </p>
               </div>
 
-              {/* Arrow */}
               <div className="flex-shrink-0">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" style={{color: '#ef233c'}}>
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -141,47 +110,8 @@ export default function Projects() {
         ))}
         </div>
         
-        {/* Pagination */}
         {projects.length > itemsPerPage && (
-          <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
-            <button
-              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              aria-label="Previous page"
-            >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            
-            {Array.from({ length: Math.ceil(projects.length / itemsPerPage) }, (_, i) => i + 1).map(page => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-all ${
-                  currentPage === page 
-                    ? 'bg-[#ef233c] text-white' 
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
-                }`}
-                aria-label={`Go to page ${page}`}
-                aria-current={currentPage === page ? 'page' : undefined}
-              >
-                {page}
-              </button>
-            ))}
-            
-            <button
-              onClick={() => handlePageChange(Math.min(Math.ceil(projects.length / itemsPerPage), currentPage + 1))}
-              disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
-              className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              aria-label="Next page"
-            >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+          <ProjectsClient projects={projects} itemsPerPage={itemsPerPage} />
         )}
         </>
       )}

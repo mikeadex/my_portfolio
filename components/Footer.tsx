@@ -10,6 +10,22 @@ export default function Footer() {
           © {currentYear} Michael Adeleye
         </p>
         
+        <a 
+          href="https://www.heylokal.com/directory?utm_source=badge&utm_medium=referral&utm_campaign=owner_badge" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          title="As seen on heyLOKAL – Your Business"
+          className="transition-opacity hover:opacity-80"
+        >
+          <img 
+            src="https://www.heylokal.com/badges/seen-on-heylokal.svg" 
+            alt="As seen on heyLOKAL" 
+            width="220" 
+            height="48"
+            loading="lazy"
+          />
+        </a>
+        
         <p className="text-xs text-gray-600">
           Built with Next.js
         </p>
